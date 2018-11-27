@@ -1,5 +1,8 @@
 ﻿namespace FSharpKoans
 open FSharpKoans.Core
+open System
+open System.Globalization
+open NUnit.Framework
 
 //---------------------------------------------------------------
 // Apply Your Knowledge!
@@ -60,6 +63,14 @@ module ``about the stock example`` =
 
     [<Koan>]
     let YouGotTheAnswerCorrect() =
-        let result =  __
+        let splitCommas (x:string) =
+            x.Split([|','|])
+
+        let result = stockData.Tail
+                        |> List.map splitCommas
+                        |> List.maxBy (fun x -> 
+                            [x.[1];x.[4]]
+                                |> List.map (fun x -> System.Double.Parse (x, CultureInfo.InvariantCulture))
+                                |> fun x -> abs (x.[0] - x.[1]))
         
-        AssertEquality "2012-03-13" result
+        AssertEquality "2012-03-13" result.[0]
